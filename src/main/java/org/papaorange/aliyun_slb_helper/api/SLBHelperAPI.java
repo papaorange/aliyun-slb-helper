@@ -69,7 +69,8 @@ public class SLBHelperAPI {
 					.getAcsResponse(request);
 			response.getLoadBalancers().forEach(x -> {
 				lbs.add(x);
-				logger.debug("method:describeLoadBalancers:responselbid:"+x.getLoadBalancerId());
+				logger.debug("method:describeLoadBalancers:responselbid:"
+						+ x.getLoadBalancerId());
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,8 +103,8 @@ public class SLBHelperAPI {
 		return lb;
 	}
 
-	public static DescribeLoadBalancerAttributeResponse describeLoadBalancerAttr(String region,
-			String lbid) {
+	public static DescribeLoadBalancerAttributeResponse describeLoadBalancerAttr(
+			String region, String lbid) {
 		logger.debug("method:describeLoadBalancerAttr");
 
 		IAcsClient client = new SLBHelperAPIClient().getDefaultClient();

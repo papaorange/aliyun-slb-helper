@@ -25,8 +25,9 @@ public class App {
 			SLBHelperAPI.describeLoadBalancers(region).forEach(lb -> {
 
 				// System.err.println("current lbid:"+lb.getLoadBalancerId());
-//				"ap-southeast-5","ap-northeast-1","cn-huhehaote","ap-southeast-2","me-east-1","cn-zhangjiakou"
-				List<String> badRegions = Arrays.asList("ap-northeast-1","cn-huhehaote","me-east-1");
+				// "ap-southeast-5","ap-northeast-1","cn-huhehaote","ap-southeast-2","me-east-1","cn-zhangjiakou"
+				List<String> badRegions = Arrays.asList("ap-northeast-1",
+						"cn-huhehaote", "me-east-1");
 				if (!badRegions.contains(lb.getRegionIdAlias())) {
 					try {
 						Exporter.exportByLoadBalancerId(region,
@@ -36,8 +37,6 @@ public class App {
 						e.printStackTrace();
 					}
 				}
-
-				
 
 			});
 
