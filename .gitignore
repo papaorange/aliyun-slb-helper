@@ -28,3 +28,6 @@ dependency-reduced-pom.xml
 *.ipr 
 *.iws 
 *.idea 
+
+# Akey file
+ak.json
