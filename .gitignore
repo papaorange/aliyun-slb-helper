@@ -31,3 +31,7 @@ dependency-reduced-pom.xml
 
 # Akey file
 ak.json
+
+# output
+slbs/*
+logs/*
