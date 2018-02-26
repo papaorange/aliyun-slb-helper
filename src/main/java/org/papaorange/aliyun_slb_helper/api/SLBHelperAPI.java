@@ -296,7 +296,7 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeListenerAccessControlAttributeResponse describeListenerAccessControlAttr(String lbid,
+	public static DescribeListenerAccessControlAttributeResponse describeListenerAccessControlAttr(String region,String lbid,
 			Integer port) {
 		IAcsClient client = new SLBHelperAPIClient().getDefaultClient();
 		DescribeListenerAccessControlAttributeResponse response = null;
@@ -305,6 +305,7 @@ public class SLBHelperAPI {
 		DescribeListenerAccessControlAttributeRequest describeListenerAccessControlAttribute = new DescribeListenerAccessControlAttributeRequest();
 		describeListenerAccessControlAttribute.setLoadBalancerId(lbid);
 		describeListenerAccessControlAttribute.setListenerPort(port);
+		describeListenerAccessControlAttribute.setRegionId(region);
 
 		// 发起请求
 		try {
