@@ -1,6 +1,7 @@
 # Operating System Files 
 
-*.DS_Store 
+*.DS_Store
+.DS_Store 
 Thumbs.db 
 *.sw? 
 .#* 
