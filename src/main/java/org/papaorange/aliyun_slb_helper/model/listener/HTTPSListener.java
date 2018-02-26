@@ -2,8 +2,8 @@ package org.papaorange.aliyun_slb_helper.model.listener;
 
 public class HTTPSListener extends HTTPListener {
 
-	private String serverCertificateId;
-	private String caCertificateId;
+	private String	serverCertificateId;
+	private String	caCertificateId;
 
 	public String getServerCertificateId() {
 		return serverCertificateId;

@@ -65,12 +65,10 @@ public class SLBHelperAPI {
 		logger.debug("method:describeLoadBalancers:region:" + region);
 
 		try {
-			DescribeLoadBalancersResponse response = client
-					.getAcsResponse(request);
+			DescribeLoadBalancersResponse response = client.getAcsResponse(request);
 			response.getLoadBalancers().forEach(x -> {
 				lbs.add(x);
-				logger.debug("method:describeLoadBalancers:responselbid:"
-						+ x.getLoadBalancerId());
+				logger.debug("method:describeLoadBalancers:responselbid:" + x.getLoadBalancerId());
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,8 +77,7 @@ public class SLBHelperAPI {
 		return lbs;
 	}
 
-	public static LoadBalancer describeLoadBalancer(String region,
-			String lbid) {
+	public static LoadBalancer describeLoadBalancer(String region, String lbid) {
 		logger.debug("method:describeLoadBalancer");
 
 		IAcsClient client = new SLBHelperAPIClient().getClient(region);
@@ -88,12 +85,10 @@ public class SLBHelperAPI {
 		DescribeLoadBalancersRequest request = new DescribeLoadBalancersRequest();
 		request.setRegionId(region);
 		request.setLoadBalancerId(lbid);
-		logger.debug("method:describeLoadBalancer:region:" + region + "lbid:"
-				+ lbid);
+		logger.debug("method:describeLoadBalancer:region:" + region + "lbid:" + lbid);
 
 		try {
-			DescribeLoadBalancersResponse response = client
-					.getAcsResponse(request);
+			DescribeLoadBalancersResponse response = client.getAcsResponse(request);
 			lb = response.getLoadBalancers().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,8 +98,7 @@ public class SLBHelperAPI {
 		return lb;
 	}
 
-	public static DescribeLoadBalancerAttributeResponse describeLoadBalancerAttr(
-			String region, String lbid) {
+	public static DescribeLoadBalancerAttributeResponse describeLoadBalancerAttr(String region, String lbid) {
 		logger.debug("method:describeLoadBalancerAttr");
 
 		IAcsClient client = new SLBHelperAPIClient().getDefaultClient();
@@ -125,10 +119,8 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeLoadBalancerAttributeResponse describeLoadBalancerAttr(
-			LoadBalancer lb) {
-		IAcsClient client = new SLBHelperAPIClient()
-				.getClient(lb.getRegionId().toString());
+	public static DescribeLoadBalancerAttributeResponse describeLoadBalancerAttr(LoadBalancer lb) {
+		IAcsClient client = new SLBHelperAPIClient().getClient(lb.getRegionId().toString());
 		// 设置参数
 		DescribeLoadBalancerAttributeRequest request = new DescribeLoadBalancerAttributeRequest();
 		request.setLoadBalancerId(lb.getLoadBalancerId());
@@ -143,10 +135,9 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeLoadBalancerTCPListenerAttributeResponse describeLoadBalancerTCPListenerAttr(
-			LoadBalancer lb, int port) {
-		IAcsClient client = new SLBHelperAPIClient()
-				.getClient(lb.getRegionId().toString());
+	public static DescribeLoadBalancerTCPListenerAttributeResponse describeLoadBalancerTCPListenerAttr(LoadBalancer lb,
+			int port) {
+		IAcsClient client = new SLBHelperAPIClient().getClient(lb.getRegionId().toString());
 		// 设置参数
 		DescribeLoadBalancerTCPListenerAttributeRequest request = new DescribeLoadBalancerTCPListenerAttributeRequest();
 		request.setLoadBalancerId(lb.getLoadBalancerId());
@@ -162,10 +153,9 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeLoadBalancerUDPListenerAttributeResponse describeLoadBalancerUDPListenerAttr(
-			LoadBalancer lb, int port) {
-		IAcsClient client = new SLBHelperAPIClient()
-				.getClient(lb.getRegionId().toString());
+	public static DescribeLoadBalancerUDPListenerAttributeResponse describeLoadBalancerUDPListenerAttr(LoadBalancer lb,
+			int port) {
+		IAcsClient client = new SLBHelperAPIClient().getClient(lb.getRegionId().toString());
 		// 设置参数
 		DescribeLoadBalancerUDPListenerAttributeRequest request = new DescribeLoadBalancerUDPListenerAttributeRequest();
 		request.setLoadBalancerId(lb.getLoadBalancerId());
@@ -183,8 +173,7 @@ public class SLBHelperAPI {
 
 	public static DescribeLoadBalancerHTTPListenerAttributeResponse describeLoadBalancerHTTPListenerAttr(
 			LoadBalancer lb, int port) {
-		IAcsClient client = new SLBHelperAPIClient()
-				.getClient(lb.getRegionId().toString());
+		IAcsClient client = new SLBHelperAPIClient().getClient(lb.getRegionId().toString());
 		// 设置参数
 		DescribeLoadBalancerHTTPListenerAttributeRequest request = new DescribeLoadBalancerHTTPListenerAttributeRequest();
 		request.setLoadBalancerId(lb.getLoadBalancerId());
@@ -202,8 +191,7 @@ public class SLBHelperAPI {
 
 	public static DescribeLoadBalancerHTTPSListenerAttributeResponse describeLoadBalancerHTTPSListenerAttr(
 			LoadBalancer lb, int port) {
-		IAcsClient client = new SLBHelperAPIClient()
-				.getClient(lb.getRegionId().toString());
+		IAcsClient client = new SLBHelperAPIClient().getClient(lb.getRegionId().toString());
 		// 设置参数
 		DescribeLoadBalancerHTTPSListenerAttributeRequest request = new DescribeLoadBalancerHTTPSListenerAttributeRequest();
 		request.setLoadBalancerId(lb.getLoadBalancerId());
@@ -219,8 +207,7 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeVServerGroupsResponse describeVServerGroups(
-			String region, String lbid) {
+	public static DescribeVServerGroupsResponse describeVServerGroups(String region, String lbid) {
 		IAcsClient client = new SLBHelperAPIClient().getClient(region);
 		DescribeVServerGroupsResponse response = null;
 		// 设置参数
@@ -237,8 +224,8 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeMasterSlaveVServerGroupsResponse describeMasterSlaveVServerGroups(
-			String region, String lbid) {
+	public static DescribeMasterSlaveVServerGroupsResponse describeMasterSlaveVServerGroups(String region,
+			String lbid) {
 		IAcsClient client = new SLBHelperAPIClient().getClient(region);
 		DescribeMasterSlaveVServerGroupsResponse response = null;
 		// 设置参数
@@ -255,8 +242,7 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeVServerGroupAttributeResponse describeVServerGroupsAttr(
-			String region, String groupId) {
+	public static DescribeVServerGroupAttributeResponse describeVServerGroupsAttr(String region, String groupId) {
 		IAcsClient client = new SLBHelperAPIClient().getClient(region);
 		DescribeVServerGroupAttributeResponse response = null;
 		// 设置参数
@@ -273,8 +259,8 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeMasterSlaveVServerGroupAttributeResponse describeMasterSlaveVServerGroupAttr(
-			String region, String groupId) {
+	public static DescribeMasterSlaveVServerGroupAttributeResponse describeMasterSlaveVServerGroupAttr(String region,
+			String groupId) {
 		IAcsClient client = new SLBHelperAPIClient().getClient(region);
 		DescribeMasterSlaveVServerGroupAttributeResponse response = null;
 		// 设置参数
@@ -291,8 +277,7 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeRulesResponse describeRules(String region,
-			String lbid, Integer port) {
+	public static DescribeRulesResponse describeRules(String region, String lbid, Integer port) {
 		IAcsClient client = new SLBHelperAPIClient().getClient(region);
 		DescribeRulesResponse response = null;
 
@@ -311,8 +296,8 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeListenerAccessControlAttributeResponse describeListenerAccessControlAttr(
-			String lbid, Integer port) {
+	public static DescribeListenerAccessControlAttributeResponse describeListenerAccessControlAttr(String lbid,
+			Integer port) {
 		IAcsClient client = new SLBHelperAPIClient().getDefaultClient();
 		DescribeListenerAccessControlAttributeResponse response = null;
 
@@ -323,8 +308,7 @@ public class SLBHelperAPI {
 
 		// 发起请求
 		try {
-			response = client
-					.getAcsResponse(describeListenerAccessControlAttribute);
+			response = client.getAcsResponse(describeListenerAccessControlAttribute);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -332,14 +316,12 @@ public class SLBHelperAPI {
 		return response;
 	}
 
-	public static DescribeServerCertificatesResponse describeServerCertificates(
-			String region) {
+	public static DescribeServerCertificatesResponse describeServerCertificates(String region) {
 		// TODO
 		return null;
 	}
 
-	public static DescribeCACertificatesResponse describeCACertificates(
-			String region) {
+	public static DescribeCACertificatesResponse describeCACertificates(String region) {
 		// TODO
 		return null;
 	}

@@ -2,8 +2,8 @@ package org.papaorange.aliyun_slb_helper.model.listener;
 
 public class TCPListener extends Listener {
 
-	private Integer persistenceTimeout;
-	private Integer establishedTimeout;
+	private Integer	persistenceTimeout;
+	private Integer	establishedTimeout;
 
 	public Integer getPersistenceTimeout() {
 		return persistenceTimeout;

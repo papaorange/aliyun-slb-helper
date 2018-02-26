@@ -9,16 +9,14 @@ public class SLBHelperAPIClient {
 	private IAcsClient client = null;
 
 	public IAcsClient getClient(String region) {
-		DefaultProfile profile = DefaultProfile.getProfile(region,
-				AKConfig.getInstance().getAccessKeyId(),
+		DefaultProfile profile = DefaultProfile.getProfile(region, AKConfig.getInstance().getAccessKeyId(),
 				AKConfig.getInstance().getAccessKeySecret());
 		client = new DefaultAcsClient(profile);
 		return client;
 	}
 
 	public IAcsClient getDefaultClient() {
-		DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou",
-				AKConfig.getInstance().getAccessKeyId(),
+		DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", AKConfig.getInstance().getAccessKeyId(),
 				AKConfig.getInstance().getAccessKeySecret());
 		client = new DefaultAcsClient(profile);
 		return client;

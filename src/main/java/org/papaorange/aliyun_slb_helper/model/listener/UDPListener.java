@@ -1,9 +1,9 @@
 package org.papaorange.aliyun_slb_helper.model.listener;
 
 public class UDPListener extends Listener {
-	private Integer persistenceTimeout;
-	private String HealthCheckExp;
-	private String HealthCheckReq;
+	private Integer	persistenceTimeout;
+	private String	HealthCheckExp;
+	private String	HealthCheckReq;
 
 	public Integer getPersistenceTimeout() {
 		return persistenceTimeout;

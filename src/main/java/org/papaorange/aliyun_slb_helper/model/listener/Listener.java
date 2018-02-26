@@ -2,29 +2,29 @@ package org.papaorange.aliyun_slb_helper.model.listener;
 
 public abstract class Listener {
 
-	private Integer listenerPort;
-	private Integer backendServerPort;
-	private String protocol;
-	private String realServerType;
-	private String realServerId;
-	private String isForwarded;
-	private String status;
-	private Integer bandwidth;
-	private String scheduler;
-	private String healthCheck;
-	private String healthCheckType;
-	private Integer healthyThreshold;
-	private Integer unhealthyThreshold;
-	private Integer healthCheckConnectTimeout;
-	private Integer healthCheckInterval;
-	private String healthCheckDomain;
-	private String healthCheckURI;
-	private String healthCheckHttpCode;
-	private String vServerGroupId;
-	private String materSlaveServerGroupId;
-	private Integer healthCheckConnectPort;
-	private String accessControlStatus;
-	private String sourceItems;
+	private Integer	listenerPort;
+	private Integer	backendServerPort;
+	private String	protocol;
+	private String	realServerType;
+	private String	realServerId;
+	private String	isForwarded;
+	private String	status;
+	private Integer	bandwidth;
+	private String	scheduler;
+	private String	healthCheck;
+	private String	healthCheckType;
+	private Integer	healthyThreshold;
+	private Integer	unhealthyThreshold;
+	private Integer	healthCheckConnectTimeout;
+	private Integer	healthCheckInterval;
+	private String	healthCheckDomain;
+	private String	healthCheckURI;
+	private String	healthCheckHttpCode;
+	private String	vServerGroupId;
+	private String	materSlaveServerGroupId;
+	private Integer	healthCheckConnectPort;
+	private String	accessControlStatus;
+	private String	sourceItems;
 
 	public String getProtocol() {
 		return protocol;
@@ -182,8 +182,7 @@ public abstract class Listener {
 		return healthCheckConnectTimeout;
 	}
 
-	public void setHealthCheckConnectTimeout(
-			Integer healthCheckConnectTimeout) {
+	public void setHealthCheckConnectTimeout(Integer healthCheckConnectTimeout) {
 		this.healthCheckConnectTimeout = healthCheckConnectTimeout;
 	}
 

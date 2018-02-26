@@ -6,27 +6,27 @@ import com.aliyuncs.slb.model.v20140515.DescribeLoadBalancerAttributeResponse.Ba
 
 public class LoadBalancerObject {
 
-	private String id;
-	private String name;
-	private String address;
-	private String addrType;
-	private String internetChargeType;
-	private String payType;
-	private String vSwitchId;
-	private String vpcId;
-	private String networkType;
-	private Integer bandwidth;
-	private String resourceGroupId;
-	private String masterZoneId;
-	private String salveZoneId;
-	private String regionIdAlias;
-	private String regionId;
-	private String createTime;
-	private String endTime;
-	private List<Listener> listeners;
-	private List<BackendServer> backendServers;
-	private List<VServerGroup> vServerGroups;
-	private List<MasterSlaveServerGroup> masterSlaveGroups;
+	private String							id;
+	private String							name;
+	private String							address;
+	private String							addrType;
+	private String							internetChargeType;
+	private String							payType;
+	private String							vSwitchId;
+	private String							vpcId;
+	private String							networkType;
+	private Integer							bandwidth;
+	private String							resourceGroupId;
+	private String							masterZoneId;
+	private String							salveZoneId;
+	private String							regionIdAlias;
+	private String							regionId;
+	private String							createTime;
+	private String							endTime;
+	private List<Listener>					listeners;
+	private List<BackendServer>				backendServers;
+	private List<VServerGroup>				vServerGroups;
+	private List<MasterSlaveServerGroup>	masterSlaveGroups;
 
 	public String getId() {
 		return id;

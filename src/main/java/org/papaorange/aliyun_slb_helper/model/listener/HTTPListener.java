@@ -5,15 +5,15 @@ import com.aliyuncs.slb.model.v20140515.DescribeRulesResponse.Rule;
 
 public class HTTPListener extends Listener {
 
-	private String cookie;
-	private Integer cookieTimeout;
-	private String stickySessionType;
-	private String gzip;
-	private String xForwardedFor_SLBIP;
-	private String xForwardedFor_SLBID;
-	private String xForwardedFor_proto;
-	private String xForwardedFor;
-	private List<Rule> rules;
+	private String		cookie;
+	private Integer		cookieTimeout;
+	private String		stickySessionType;
+	private String		gzip;
+	private String		xForwardedFor_SLBIP;
+	private String		xForwardedFor_SLBID;
+	private String		xForwardedFor_proto;
+	private String		xForwardedFor;
+	private List<Rule>	rules;
 
 	public String getCookie() {
 		return cookie;

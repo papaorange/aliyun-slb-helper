@@ -31,14 +31,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Exporter {
 
-	public static String exportByLoadBalancerId(String region, String lbid,
-			boolean genfile) throws IOException {
+	public static String exportByLoadBalancerId(String region, String lbid, boolean genfile) throws IOException {
 
 		LoadBalancerObject lbobj = new LoadBalancerObject();
 		List<Listener> listeners = new ArrayList<>();
 
-		DescribeLoadBalancerAttributeResponse response = SLBHelperAPI
-				.describeLoadBalancerAttr(region, lbid);
+		DescribeLoadBalancerAttributeResponse response = SLBHelperAPI.describeLoadBalancerAttr(region, lbid);
 
 		lbobj.setId(response.getLoadBalancerId());
 		lbobj.setAddress(response.getAddress());
@@ -60,34 +58,27 @@ public class Exporter {
 
 		List<VServerGroup> vGroups = new ArrayList<>();
 		VServerGroup vGroup = new VServerGroup();
-		SLBHelperAPI.describeVServerGroups(lbobj.getRegionIdAlias(), lbid)
-				.getVServerGroups().forEach(group -> {
-					vGroup.setVServerGroupId(group.getVServerGroupId());
-					vGroup.setVServerGroupName(group.getVServerGroupName());
-					List<BackendServer> backendServers = SLBHelperAPI
-							.describeVServerGroupsAttr(lbobj.getRegionIdAlias(),
-									group.getVServerGroupId())
-							.getBackendServers();
-					vGroup.setBackendServer(backendServers);
-					vGroups.add(vGroup);
-				});
+		SLBHelperAPI.describeVServerGroups(lbobj.getRegionIdAlias(), lbid).getVServerGroups().forEach(group -> {
+			vGroup.setVServerGroupId(group.getVServerGroupId());
+			vGroup.setVServerGroupName(group.getVServerGroupName());
+			List<BackendServer> backendServers = SLBHelperAPI
+					.describeVServerGroupsAttr(lbobj.getRegionIdAlias(), group.getVServerGroupId()).getBackendServers();
+			vGroup.setBackendServer(backendServers);
+			vGroups.add(vGroup);
+		});
 		lbobj.setvServerGroups(vGroups);
 
 		List<MasterSlaveServerGroup> masterSlaveServerGroups = new ArrayList<>();
 		MasterSlaveServerGroup masterSlaveServerGroup = new MasterSlaveServerGroup();
-		SLBHelperAPI.describeMasterSlaveVServerGroups(lbobj.getRegionIdAlias(),
-				lbid).getMasterSlaveVServerGroups().forEach(group -> {
-					masterSlaveServerGroup.setMasterSlaveServerGroupId(
-							group.getMasterSlaveVServerGroupId());
-					masterSlaveServerGroup.setMasterSlaveServerGroupName(
-							group.getMasterSlaveVServerGroupName());
+		SLBHelperAPI.describeMasterSlaveVServerGroups(lbobj.getRegionIdAlias(), lbid).getMasterSlaveVServerGroups()
+				.forEach(group -> {
+					masterSlaveServerGroup.setMasterSlaveServerGroupId(group.getMasterSlaveVServerGroupId());
+					masterSlaveServerGroup.setMasterSlaveServerGroupName(group.getMasterSlaveVServerGroupName());
 					List<MasterSlaveBackendServer> masterSlaveVServerBackendServers = SLBHelperAPI
-							.describeMasterSlaveVServerGroupAttr(
-									lbobj.getRegionIdAlias(),
+							.describeMasterSlaveVServerGroupAttr(lbobj.getRegionIdAlias(),
 									group.getMasterSlaveVServerGroupId())
 							.getMasterSlaveBackendServers();
-					masterSlaveServerGroup.setMasterSlaveBackendServers(
-							masterSlaveVServerBackendServers);
+					masterSlaveServerGroup.setMasterSlaveBackendServers(masterSlaveVServerBackendServers);
 					masterSlaveServerGroups.add(masterSlaveServerGroup);
 				});
 		lbobj.setMasterSlaveGroups(masterSlaveServerGroups);
@@ -98,219 +89,164 @@ public class Exporter {
 			int port = protocolAndPort.getListenerPort();
 
 			switch (protocol) {
-				case "tcp" : {
-					listener = new TCPListener();
-					DescribeLoadBalancerTCPListenerAttributeResponse attr = SLBHelperAPI
-							.describeLoadBalancerTCPListenerAttr(
-									SLBHelperAPI.describeLoadBalancer(
-											lbobj.getRegionIdAlias(), lbid),
-									port);
-					if (attr.getMasterSlaveServerGroupId() != null) {
-						listener.setRealServerType("masterSlaveGroup");
-						listener.setRealServerId(
-								attr.getMasterSlaveServerGroupId());
-					} else if (attr.getVServerGroupId() != null) {
-						listener.setRealServerType("vServerGroup");
-						listener.setRealServerId(attr.getVServerGroupId());
-					} else {
-						listener.setRealServerType("backendServers");
-						attr.setBackendServerPort(attr.getBackendServerPort());
-						listener.setBackendServerPort(
-								attr.getBackendServerPort());
-					}
-
-					listener.setListenerPort(port);
-					listener.setProtocol(protocol);
-					listener.setBandwidth(attr.getBandwidth());
-					listener.setScheduler(attr.getScheduler());
-					listener.setHealthCheck(attr.getHealthCheck());
-					listener.setHealthCheckType(attr.getHealthCheckType());
-					listener.setHealthCheckConnectPort(
-							attr.getHealthCheckConnectPort());
-					listener.setHealthyThreshold(attr.getHealthyThreshold());
-					listener.setHealthCheckConnectTimeout(
-							attr.getHealthCheckConnectTimeout());
-					listener.setHealthCheckInterval(
-							attr.getHealthCheckInterval());
-					listener.setHealthCheckDomain(attr.getHealthCheckDomain());
-					listener.setHealthCheckURI(attr.getHealthCheckURI());
-					listener.setHealthCheckHttpCode(
-							attr.getHealthCheckHttpCode());
-					listener.setUnhealthyThreshold(
-							attr.getUnhealthyThreshold());
-					((TCPListener) listener).setEstablishedTimeout(
-							attr.getEstablishedTimeout());
-					((TCPListener) listener).setPersistenceTimeout(
-							attr.getPersistenceTimeout());
-
-				}
-					break;
-				case "udp" : {
-					listener = new UDPListener();
-
-					DescribeLoadBalancerUDPListenerAttributeResponse attr = SLBHelperAPI
-							.describeLoadBalancerUDPListenerAttr(
-									SLBHelperAPI.describeLoadBalancer(
-											lbobj.getRegionIdAlias(), lbid),
-									port);
-					if (attr.getMasterSlaveServerGroupId() != null) {
-						listener.setRealServerType("masterSlaveGroup");
-						listener.setRealServerId(
-								attr.getMasterSlaveServerGroupId());
-					} else if (attr.getVServerGroupId() != null) {
-						listener.setRealServerType("vServerGroup");
-						listener.setRealServerId(attr.getVServerGroupId());
-					} else {
-						listener.setRealServerType("backendServers");
-						attr.setBackendServerPort(attr.getBackendServerPort());
-						listener.setBackendServerPort(
-								attr.getBackendServerPort());
-					}
-
-					listener.setListenerPort(port);
-					listener.setProtocol(protocol);
-					listener.setBandwidth(attr.getBandwidth());
-					listener.setScheduler(attr.getScheduler());
-					listener.setHealthCheckConnectPort(
-							attr.getHealthCheckConnectPort());
-					listener.setHealthCheck(attr.getHealthCheck());
-					listener.setHealthyThreshold(attr.getHealthyThreshold());
-					listener.setHealthCheckConnectTimeout(
-							attr.getHealthCheckConnectTimeout());
-					listener.setHealthCheckInterval(
-							attr.getHealthCheckInterval());
-					listener.setUnhealthyThreshold(
-							attr.getUnhealthyThreshold());
-					((UDPListener) listener).setPersistenceTimeout(
-							attr.getPersistenceTimeout());
-					((UDPListener) listener)
-							.setHealthCheckExp(attr.getHealthCheckExp());
-					((UDPListener) listener)
-							.setHealthCheckReq(attr.getHealthCheckReq());
-
+			case "tcp": {
+				listener = new TCPListener();
+				DescribeLoadBalancerTCPListenerAttributeResponse attr = SLBHelperAPI
+						.describeLoadBalancerTCPListenerAttr(
+								SLBHelperAPI.describeLoadBalancer(lbobj.getRegionIdAlias(), lbid), port);
+				if (attr.getMasterSlaveServerGroupId() != null) {
+					listener.setRealServerType("masterSlaveGroup");
+					listener.setRealServerId(attr.getMasterSlaveServerGroupId());
+				} else if (attr.getVServerGroupId() != null) {
+					listener.setRealServerType("vServerGroup");
+					listener.setRealServerId(attr.getVServerGroupId());
+				} else {
+					listener.setRealServerType("backendServers");
+					attr.setBackendServerPort(attr.getBackendServerPort());
+					listener.setBackendServerPort(attr.getBackendServerPort());
 				}
 
-					break;
-				case "http" : {
-					listener = new HTTPListener();
-					DescribeLoadBalancerHTTPListenerAttributeResponse attr = SLBHelperAPI
-							.describeLoadBalancerHTTPListenerAttr(
-									SLBHelperAPI.describeLoadBalancer(
-											lbobj.getRegionIdAlias(), lbid),
-									port);
+				listener.setListenerPort(port);
+				listener.setProtocol(protocol);
+				listener.setBandwidth(attr.getBandwidth());
+				listener.setScheduler(attr.getScheduler());
+				listener.setHealthCheck(attr.getHealthCheck());
+				listener.setHealthCheckType(attr.getHealthCheckType());
+				listener.setHealthCheckConnectPort(attr.getHealthCheckConnectPort());
+				listener.setHealthyThreshold(attr.getHealthyThreshold());
+				listener.setHealthCheckConnectTimeout(attr.getHealthCheckConnectTimeout());
+				listener.setHealthCheckInterval(attr.getHealthCheckInterval());
+				listener.setHealthCheckDomain(attr.getHealthCheckDomain());
+				listener.setHealthCheckURI(attr.getHealthCheckURI());
+				listener.setHealthCheckHttpCode(attr.getHealthCheckHttpCode());
+				listener.setUnhealthyThreshold(attr.getUnhealthyThreshold());
+				((TCPListener) listener).setEstablishedTimeout(attr.getEstablishedTimeout());
+				((TCPListener) listener).setPersistenceTimeout(attr.getPersistenceTimeout());
 
-					if (attr.getVServerGroupId() != null) {
-						listener.setRealServerType("vServerGroup");
-						listener.setRealServerId(attr.getVServerGroupId());
-					} else {
-						listener.setRealServerType("backendServers");
-						attr.setBackendServerPort(attr.getBackendServerPort());
-						listener.setBackendServerPort(
-								attr.getBackendServerPort());
-					}
+			}
+				break;
+			case "udp": {
+				listener = new UDPListener();
 
-					listener.setListenerPort(port);
-					listener.setProtocol(protocol);
-					listener.setBandwidth(attr.getBandwidth());
-					listener.setScheduler(attr.getScheduler());
-					listener.setHealthCheck(attr.getHealthCheck());
-					listener.setHealthCheckConnectPort(
-							attr.getHealthCheckConnectPort());
-					listener.setHealthyThreshold(attr.getHealthyThreshold());
-					listener.setHealthCheckConnectTimeout(
-							attr.getHealthCheckTimeout());
-					listener.setHealthCheckInterval(
-							attr.getHealthCheckInterval());
-					listener.setHealthCheckDomain(attr.getHealthCheckDomain());
-					listener.setHealthCheckURI(attr.getHealthCheckURI());
-					listener.setHealthCheckHttpCode(
-							attr.getHealthCheckHttpCode());
-					listener.setUnhealthyThreshold(
-							attr.getUnhealthyThreshold());
-					((HTTPListener) (listener)).setCookie(attr.getCookie());
-					((HTTPListener) (listener))
-							.setCookieTimeout(attr.getCookieTimeout());
-					((HTTPListener) (listener)).setGzip(attr.getGzip());
-					((HTTPListener) (listener))
-							.setStickySessionType(attr.getStickySessionType());
-					((HTTPListener) (listener))
-							.setxForwardedFor(attr.getXForwardedFor());
-					((HTTPListener) (listener)).setxForwardedFor_proto(
-							attr.getXForwardedFor_proto());
-					((HTTPListener) (listener)).setxForwardedFor_SLBIP(
-							attr.getXForwardedFor_SLBIP());
-					((HTTPListener) (listener)).setxForwardedFor_SLBID(
-							attr.getXForwardedFor_SLBID());
-
-					List<Rule> rules = SLBHelperAPI
-							.describeRules(lbobj.getRegionIdAlias(), lbid, port)
-							.getRules();
-					((HTTPListener) (listener)).setRules(rules);
+				DescribeLoadBalancerUDPListenerAttributeResponse attr = SLBHelperAPI
+						.describeLoadBalancerUDPListenerAttr(
+								SLBHelperAPI.describeLoadBalancer(lbobj.getRegionIdAlias(), lbid), port);
+				if (attr.getMasterSlaveServerGroupId() != null) {
+					listener.setRealServerType("masterSlaveGroup");
+					listener.setRealServerId(attr.getMasterSlaveServerGroupId());
+				} else if (attr.getVServerGroupId() != null) {
+					listener.setRealServerType("vServerGroup");
+					listener.setRealServerId(attr.getVServerGroupId());
+				} else {
+					listener.setRealServerType("backendServers");
+					attr.setBackendServerPort(attr.getBackendServerPort());
+					listener.setBackendServerPort(attr.getBackendServerPort());
 				}
-					break;
-				case "https" : {
-					listener = new HTTPSListener();
-					DescribeLoadBalancerHTTPSListenerAttributeResponse attr = SLBHelperAPI
-							.describeLoadBalancerHTTPSListenerAttr(
-									SLBHelperAPI.describeLoadBalancer(
-											lbobj.getRegionIdAlias(), lbid),
-									port);
-					if (attr.getVServerGroupId() != null) {
-						listener.setRealServerType("vServerGroup");
-						listener.setRealServerId(attr.getVServerGroupId());
-					} else {
-						listener.setRealServerType("backendServers");
-						attr.setBackendServerPort(attr.getBackendServerPort());
-						listener.setBackendServerPort(
-								attr.getBackendServerPort());
-					}
 
-					listener.setListenerPort(port);
-					listener.setProtocol(protocol);
-					listener.setBandwidth(attr.getBandwidth());
-					listener.setScheduler(attr.getScheduler());
-					listener.setHealthCheck(attr.getHealthCheck());
-					listener.setHealthCheckConnectPort(
-							attr.getHealthCheckConnectPort());
-					listener.setHealthyThreshold(attr.getHealthyThreshold());
-					listener.setHealthCheckConnectTimeout(
-							attr.getHealthCheckTimeout());
-					listener.setHealthCheckInterval(
-							attr.getHealthCheckInterval());
-					listener.setHealthCheckDomain(attr.getHealthCheckDomain());
-					listener.setHealthCheckURI(attr.getHealthCheckURI());
-					listener.setHealthCheckHttpCode(
-							attr.getHealthCheckHttpCode());
-					listener.setUnhealthyThreshold(
-							attr.getUnhealthyThreshold());
-					((HTTPSListener) (listener)).setCookie(attr.getCookie());
-					((HTTPSListener) (listener))
-							.setCookieTimeout(attr.getCookieTimeout());
-					((HTTPSListener) (listener)).setGzip(attr.getGzip());
-					((HTTPSListener) (listener))
-							.setStickySessionType(attr.getStickySessionType());
-					((HTTPSListener) (listener))
-							.setxForwardedFor(attr.getXForwardedFor());
-					((HTTPSListener) (listener)).setxForwardedFor_proto(
-							attr.getXForwardedFor_proto());
-					((HTTPSListener) (listener)).setxForwardedFor_SLBIP(
-							attr.getXForwardedFor_SLBIP());
-					((HTTPSListener) (listener)).setxForwardedFor_SLBID(
-							attr.getXForwardedFor_SLBID());
-					((HTTPSListener) (listener)).setServerCertificateId(
-							attr.getServerCertificateId());
-					List<Rule> rules = SLBHelperAPI
-							.describeRules(lbobj.getRegionIdAlias(), lbid, port)
-							.getRules();
-					((HTTPSListener) (listener)).setRules(rules);
-				}
-					break;
-				default :
-					break;
+				listener.setListenerPort(port);
+				listener.setProtocol(protocol);
+				listener.setBandwidth(attr.getBandwidth());
+				listener.setScheduler(attr.getScheduler());
+				listener.setHealthCheckConnectPort(attr.getHealthCheckConnectPort());
+				listener.setHealthCheck(attr.getHealthCheck());
+				listener.setHealthyThreshold(attr.getHealthyThreshold());
+				listener.setHealthCheckConnectTimeout(attr.getHealthCheckConnectTimeout());
+				listener.setHealthCheckInterval(attr.getHealthCheckInterval());
+				listener.setUnhealthyThreshold(attr.getUnhealthyThreshold());
+				((UDPListener) listener).setPersistenceTimeout(attr.getPersistenceTimeout());
+				((UDPListener) listener).setHealthCheckExp(attr.getHealthCheckExp());
+				((UDPListener) listener).setHealthCheckReq(attr.getHealthCheckReq());
+
 			}
 
-			DescribeListenerAccessControlAttributeResponse laca = SLBHelperAPI
-					.describeListenerAccessControlAttr(lbid, port);
+				break;
+			case "http": {
+				listener = new HTTPListener();
+				DescribeLoadBalancerHTTPListenerAttributeResponse attr = SLBHelperAPI
+						.describeLoadBalancerHTTPListenerAttr(
+								SLBHelperAPI.describeLoadBalancer(lbobj.getRegionIdAlias(), lbid), port);
+
+				if (attr.getVServerGroupId() != null) {
+					listener.setRealServerType("vServerGroup");
+					listener.setRealServerId(attr.getVServerGroupId());
+				} else {
+					listener.setRealServerType("backendServers");
+					attr.setBackendServerPort(attr.getBackendServerPort());
+					listener.setBackendServerPort(attr.getBackendServerPort());
+				}
+
+				listener.setListenerPort(port);
+				listener.setProtocol(protocol);
+				listener.setBandwidth(attr.getBandwidth());
+				listener.setScheduler(attr.getScheduler());
+				listener.setHealthCheck(attr.getHealthCheck());
+				listener.setHealthCheckConnectPort(attr.getHealthCheckConnectPort());
+				listener.setHealthyThreshold(attr.getHealthyThreshold());
+				listener.setHealthCheckConnectTimeout(attr.getHealthCheckTimeout());
+				listener.setHealthCheckInterval(attr.getHealthCheckInterval());
+				listener.setHealthCheckDomain(attr.getHealthCheckDomain());
+				listener.setHealthCheckURI(attr.getHealthCheckURI());
+				listener.setHealthCheckHttpCode(attr.getHealthCheckHttpCode());
+				listener.setUnhealthyThreshold(attr.getUnhealthyThreshold());
+				((HTTPListener) (listener)).setCookie(attr.getCookie());
+				((HTTPListener) (listener)).setCookieTimeout(attr.getCookieTimeout());
+				((HTTPListener) (listener)).setGzip(attr.getGzip());
+				((HTTPListener) (listener)).setStickySessionType(attr.getStickySessionType());
+				((HTTPListener) (listener)).setxForwardedFor(attr.getXForwardedFor());
+				((HTTPListener) (listener)).setxForwardedFor_proto(attr.getXForwardedFor_proto());
+				((HTTPListener) (listener)).setxForwardedFor_SLBIP(attr.getXForwardedFor_SLBIP());
+				((HTTPListener) (listener)).setxForwardedFor_SLBID(attr.getXForwardedFor_SLBID());
+
+				List<Rule> rules = SLBHelperAPI.describeRules(lbobj.getRegionIdAlias(), lbid, port).getRules();
+				((HTTPListener) (listener)).setRules(rules);
+			}
+				break;
+			case "https": {
+				listener = new HTTPSListener();
+				DescribeLoadBalancerHTTPSListenerAttributeResponse attr = SLBHelperAPI
+						.describeLoadBalancerHTTPSListenerAttr(
+								SLBHelperAPI.describeLoadBalancer(lbobj.getRegionIdAlias(), lbid), port);
+				if (attr.getVServerGroupId() != null) {
+					listener.setRealServerType("vServerGroup");
+					listener.setRealServerId(attr.getVServerGroupId());
+				} else {
+					listener.setRealServerType("backendServers");
+					attr.setBackendServerPort(attr.getBackendServerPort());
+					listener.setBackendServerPort(attr.getBackendServerPort());
+				}
+
+				listener.setListenerPort(port);
+				listener.setProtocol(protocol);
+				listener.setBandwidth(attr.getBandwidth());
+				listener.setScheduler(attr.getScheduler());
+				listener.setHealthCheck(attr.getHealthCheck());
+				listener.setHealthCheckConnectPort(attr.getHealthCheckConnectPort());
+				listener.setHealthyThreshold(attr.getHealthyThreshold());
+				listener.setHealthCheckConnectTimeout(attr.getHealthCheckTimeout());
+				listener.setHealthCheckInterval(attr.getHealthCheckInterval());
+				listener.setHealthCheckDomain(attr.getHealthCheckDomain());
+				listener.setHealthCheckURI(attr.getHealthCheckURI());
+				listener.setHealthCheckHttpCode(attr.getHealthCheckHttpCode());
+				listener.setUnhealthyThreshold(attr.getUnhealthyThreshold());
+				((HTTPSListener) (listener)).setCookie(attr.getCookie());
+				((HTTPSListener) (listener)).setCookieTimeout(attr.getCookieTimeout());
+				((HTTPSListener) (listener)).setGzip(attr.getGzip());
+				((HTTPSListener) (listener)).setStickySessionType(attr.getStickySessionType());
+				((HTTPSListener) (listener)).setxForwardedFor(attr.getXForwardedFor());
+				((HTTPSListener) (listener)).setxForwardedFor_proto(attr.getXForwardedFor_proto());
+				((HTTPSListener) (listener)).setxForwardedFor_SLBIP(attr.getXForwardedFor_SLBIP());
+				((HTTPSListener) (listener)).setxForwardedFor_SLBID(attr.getXForwardedFor_SLBID());
+				((HTTPSListener) (listener)).setServerCertificateId(attr.getServerCertificateId());
+				List<Rule> rules = SLBHelperAPI.describeRules(lbobj.getRegionIdAlias(), lbid, port).getRules();
+				((HTTPSListener) (listener)).setRules(rules);
+			}
+				break;
+			default:
+				break;
+			}
+
+			DescribeListenerAccessControlAttributeResponse laca = SLBHelperAPI.describeListenerAccessControlAttr(lbid,
+					port);
 			listener.setAccessControlStatus(laca.getAccessControlStatus());
 			listener.setSourceItems(laca.getSourceItems());
 			listeners.add(listener);
@@ -323,8 +259,7 @@ public class Exporter {
 
 		String jsonlist = null;
 		try {
-			jsonlist = mapper.writerWithDefaultPrettyPrinter()
-					.writeValueAsString(lbobj);
+			jsonlist = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lbobj);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -332,8 +267,7 @@ public class Exporter {
 
 		if (genfile) {
 			FileUtils.write(
-					new File("slbs/" + lbobj.getRegionIdAlias() + "/" + lbid
-							+ "-" + lbobj.getAddress() + ".json"),
+					new File("slbs/" + lbobj.getRegionIdAlias() + "/" + lbid + "-" + lbobj.getAddress() + ".json"),
 					jsonlist, "UTF-8", false);
 		}
 

@@ -9,18 +9,17 @@ import com.google.gson.JsonSyntaxException;
 public class AKConfig {
 
 	// Access Key ID Access Key Secret
-	private String accessKeyId;
-	private String accessKeySecret;
+	private String			accessKeyId;
+	private String			accessKeySecret;
 
-	private static AKConfig _instance;
+	private static AKConfig	_instance;
 
 	static {
 		Gson gson = new Gson();
 		FileInputStream configIn = null;
 		try {
 			configIn = new FileInputStream("ak.json");
-			_instance = gson.fromJson(IOUtils.toString(configIn),
-					AKConfig.class);
+			_instance = gson.fromJson(IOUtils.toString(configIn), AKConfig.class);
 		} catch (JsonSyntaxException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
