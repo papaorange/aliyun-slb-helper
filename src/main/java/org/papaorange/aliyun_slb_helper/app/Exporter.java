@@ -245,7 +245,7 @@ public class Exporter {
 				break;
 			}
 
-			DescribeListenerAccessControlAttributeResponse laca = SLBHelperAPI.describeListenerAccessControlAttr(lbid,
+			DescribeListenerAccessControlAttributeResponse laca = SLBHelperAPI.describeListenerAccessControlAttr(lbobj.getRegionIdAlias(),lbid,
 					port);
 			listener.setAccessControlStatus(laca.getAccessControlStatus());
 			listener.setSourceItems(laca.getSourceItems());
