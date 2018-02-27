@@ -1,5 +1,7 @@
 package org.papaorange.aliyun_slb_helper;
 
+import org.papaorange.aliyun_slb_helper.api.SLBHelperAPIClient;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -16,6 +18,8 @@ public class AppTest extends TestCase {
 	 */
 	public AppTest(String testName) {
 		super(testName);
+		
+		new SLBHelperAPIClient().getDefaultClient();
 	}
 
 	/**
