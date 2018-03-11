@@ -1,32 +1,32 @@
 package org.papaorange.aliyun_slb_helper.model.listener;
 
 public class UDPListener extends Listener {
-	private Integer	persistenceTimeout;
-	private String	HealthCheckExp;
-	private String	HealthCheckReq;
+	private Integer	presistenceTimeout;
+	private String	healthCheckExp;
+	private String	healthCheckReq;
 
 	public Integer getPersistenceTimeout() {
-		return persistenceTimeout;
+		return presistenceTimeout;
 	}
 
 	public void setPersistenceTimeout(Integer persistenceTimeout) {
-		this.persistenceTimeout = persistenceTimeout;
+		this.presistenceTimeout = persistenceTimeout;
 	}
 
 	public String getHealthCheckExp() {
-		return HealthCheckExp;
+		return healthCheckExp;
 	}
 
 	public void setHealthCheckExp(String healthCheckExp) {
-		HealthCheckExp = healthCheckExp;
+		this.healthCheckExp = healthCheckExp;
 	}
 
 	public String getHealthCheckReq() {
-		return HealthCheckReq;
+		return healthCheckReq;
 	}
 
 	public void setHealthCheckReq(String healthCheckReq) {
-		HealthCheckReq = healthCheckReq;
+		this.healthCheckReq = healthCheckReq;
 	}
 
 }
