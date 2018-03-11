@@ -21,9 +21,12 @@ public class AKConfig {
 			configIn = new FileInputStream("ak.json");
 			_instance = gson.fromJson(IOUtils.toString(configIn), AKConfig.class);
 		} catch (JsonSyntaxException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+		  System.err.println("ak.json文件格式不正确，正确格式："+"{\"accessKeyId\": \"xxxxx\",\"accessKeySecret\": \"xxxxx\" }");
 		} catch (IOException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+          System.err.println("ak.json未找到，请在当前目录下创建ak.json文件，格式："+"{\"accessKeyId\": \"xxxxx\",\"accessKeySecret\": \"xxxxx\" }");
+
 		} finally {
 			IOUtils.closeQuietly(configIn);
 		}
