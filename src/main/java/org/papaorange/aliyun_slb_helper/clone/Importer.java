@@ -70,8 +70,6 @@ public class Importer {
 			CreateVServerGroupResponse vsgResponse = SLBHelperAPI.createVServerGroup(response.getLoadBalancerId(),
 					vsg.getVServerGroupName(), loadBalancerObject.getRegionIdAlias(), vsg.getBackendServer());
 			gMap.put(vsg.getVServerGroupId(), vsgResponse.getVServerGroupId());
-
-			System.out.println("addMAPvsg" + vsg.getVServerGroupId() + ":" + vsgResponse.getVServerGroupId());
 		});
 
 		// 创建主备服务器组
@@ -124,7 +122,6 @@ public class Importer {
 				break;
 
 			case "http":
-				System.err.println(gMap.get(listen.getRealServerId()));
 				SLBHelperAPI.createLoadBalancerHTTPListener(loadBalancerObject.getRegionIdAlias(),
 						response.getLoadBalancerId(), listen.getListenerPort(), listen.getBackendServerPort(),
 						listen.getRealServerType(), gMap.get(listen.getRealServerId()), listen.getBandwidth(),
