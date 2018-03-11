@@ -2,7 +2,9 @@ package org.papaorange.aliyun_slb_helper.clone;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.papaorange.aliyun_slb_helper.api.SLBHelperAPI;
 import org.papaorange.aliyun_slb_helper.model.LoadBalancerObject;
@@ -11,6 +13,8 @@ import org.papaorange.aliyun_slb_helper.model.listener.Listener;
 import org.papaorange.aliyun_slb_helper.model.listener.TCPListener;
 import org.papaorange.aliyun_slb_helper.model.listener.UDPListener;
 import com.aliyuncs.slb.model.v20140515.CreateLoadBalancerResponse;
+import com.aliyuncs.slb.model.v20140515.CreateMasterSlaveVServerGroupResponse;
+import com.aliyuncs.slb.model.v20140515.CreateVServerGroupResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Importer {
@@ -64,18 +68,22 @@ public class Importer {
         loadBalancerObject.getBackendServers());
 
     // 创建虚拟服务器组
-
+    Map<String, String> gMap = new HashMap<>();
     loadBalancerObject.getvServerGroups().forEach(vsg -> {
-      SLBHelperAPI.createVServerGroup(response.getLoadBalancerId(), vsg.getVServerGroupName(),
-          loadBalancerObject.getRegionIdAlias(), vsg.getBackendServer());
+      CreateVServerGroupResponse vsgResponse =
+          SLBHelperAPI.createVServerGroup(response.getLoadBalancerId(), vsg.getVServerGroupName(),
+              loadBalancerObject.getRegionIdAlias(), vsg.getBackendServer());
+      gMap.put(vsg.getVServerGroupId(), vsgResponse.getVServerGroupId());
     });
 
     // 创建主备服务器组
-
     loadBalancerObject.getMasterSlaveGroups().forEach(msg -> {
-      SLBHelperAPI.createMasterSlaveVServerGroup(response.getLoadBalancerId(),
-          msg.getMasterSlaveServerGroupName(), loadBalancerObject.getRegionIdAlias(),
-          msg.getMasterSlaveBackendServers());
+      CreateMasterSlaveVServerGroupResponse msgResponse =
+          SLBHelperAPI.createMasterSlaveVServerGroup(response.getLoadBalancerId(),
+              msg.getMasterSlaveServerGroupName(), loadBalancerObject.getRegionIdAlias(),
+              msg.getMasterSlaveBackendServers());
+      gMap.put(msg.getMasterSlaveServerGroupId(), msgResponse.getMasterSlaveVServerGroupId());
+
     });
 
     // 创建监听
@@ -100,8 +108,8 @@ public class Importer {
 
           SLBHelperAPI.createLoadBalancerTCPListener(loadBalancerObject.getRegionIdAlias(),
               response.getLoadBalancerId(), listen.getListenerPort(), listen.getBackendServerPort(),
-              listen.getRealServerType(), listen.getRealServerId(), listen.getBandwidth(),
-              listen.getScheduler(), listen.getConnectTimeout(),listen.getHealthCheckType(), listen.getHealthyThreshold(),
+              listen.getRealServerType(), gMap.get(listen.getRealServerId()), listen.getBandwidth(),
+              listen.getScheduler(), listen.getHealthCheckType(), listen.getHealthyThreshold(),
               listen.getUnhealthyThreshold(), listen.getHealthCheckConnectTimeout(),
               listen.getHealthCheckInterval(), listen.getHealthCheckDomain(),
               listen.getHealthCheckURI(), listen.getHealthCheckHttpCode(),
@@ -112,8 +120,8 @@ public class Importer {
         case "udp":
           SLBHelperAPI.createLoadBalancerUDPListener(loadBalancerObject.getRegionIdAlias(),
               response.getLoadBalancerId(), listen.getListenerPort(), listen.getBackendServerPort(),
-              listen.getRealServerType(), listen.getRealServerId(), listen.getBandwidth(),
-              listen.getScheduler(), listen.getConnectTimeout(),listen.getHealthyThreshold(), listen.getUnhealthyThreshold(),
+              listen.getRealServerType(),  gMap.get(listen.getRealServerId()), listen.getBandwidth(),
+              listen.getScheduler(), listen.getHealthyThreshold(), listen.getUnhealthyThreshold(),
               listen.getHealthCheckConnectTimeout(), listen.getHealthCheckInterval(),
               listen.getHealthCheckConnectPort(), ((UDPListener) listen).getPersistenceTimeout(),
               ((UDPListener) listen).getHealthCheckExp(),
@@ -123,8 +131,8 @@ public class Importer {
         case "http":
           SLBHelperAPI.createLoadBalancerHTTPListener(loadBalancerObject.getRegionIdAlias(),
               response.getLoadBalancerId(), listen.getListenerPort(), listen.getBackendServerPort(),
-              listen.getRealServerType(), listen.getRealServerId(), listen.getBandwidth(),
-              listen.getScheduler(), listen.getConnectTimeout(),listen.getHealthCheck(), listen.getHealthyThreshold(),
+              listen.getRealServerType(),  gMap.get(listen.getRealServerId()), listen.getBandwidth(),
+              listen.getScheduler(), listen.getHealthCheck(), listen.getHealthyThreshold(),
               listen.getUnhealthyThreshold(), listen.getHealthCheckConnectTimeout(),
               listen.getHealthCheckInterval(), listen.getHealthCheckDomain(),
               listen.getHealthCheckURI(), listen.getHealthCheckHttpCode(),
