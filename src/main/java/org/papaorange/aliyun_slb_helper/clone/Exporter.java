@@ -57,9 +57,9 @@ public class Exporter {
     lbobj.setvSwitchId(response.getVSwitchId());
     lbobj.setLoadBalancerSpec(response.getLoadBalancerSpec());
     List<VServerGroup> vGroups = new ArrayList<>();
-    VServerGroup vGroup = new VServerGroup();
     SLBHelperAPI.describeVServerGroups(lbobj.getRegionIdAlias(), lbid).getVServerGroups()
         .forEach(group -> {
+          VServerGroup vGroup = new VServerGroup();
           vGroup.setVServerGroupId(group.getVServerGroupId());
           vGroup.setVServerGroupName(group.getVServerGroupName());
           List<BackendServer> backendServers = SLBHelperAPI
@@ -71,9 +71,10 @@ public class Exporter {
     lbobj.setvServerGroups(vGroups);
 
     List<MasterSlaveServerGroup> masterSlaveServerGroups = new ArrayList<>();
-    MasterSlaveServerGroup masterSlaveServerGroup = new MasterSlaveServerGroup();
     SLBHelperAPI.describeMasterSlaveVServerGroups(lbobj.getRegionIdAlias(), lbid)
         .getMasterSlaveVServerGroups().forEach(group -> {
+          MasterSlaveServerGroup masterSlaveServerGroup = new MasterSlaveServerGroup();
+
           masterSlaveServerGroup.setMasterSlaveServerGroupId(group.getMasterSlaveVServerGroupId());
           masterSlaveServerGroup
               .setMasterSlaveServerGroupName(group.getMasterSlaveVServerGroupName());
@@ -108,7 +109,7 @@ public class Exporter {
             listener.setBackendServerPort(attr.getBackendServerPort());
           }
 
-          
+
           listener.setListenerPort(port);
           listener.setProtocol(protocol);
           listener.setBandwidth(attr.getBandwidth());
@@ -145,7 +146,7 @@ public class Exporter {
             attr.setBackendServerPort(attr.getBackendServerPort());
             listener.setBackendServerPort(attr.getBackendServerPort());
           }
-          
+
           listener.setListenerPort(port);
           listener.setProtocol(protocol);
           listener.setBandwidth(attr.getBandwidth());
@@ -178,7 +179,7 @@ public class Exporter {
             listener.setBackendServerPort(attr.getBackendServerPort());
           }
 
-          
+
           listener.setListenerPort(port);
           listener.setProtocol(protocol);
           listener.setBandwidth(attr.getBandwidth());
