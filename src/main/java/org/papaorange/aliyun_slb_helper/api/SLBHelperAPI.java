@@ -384,11 +384,12 @@ public class SLBHelperAPI {
   public static CreateLoadBalancerHTTPListenerResponse createLoadBalancerHTTPListener(
       String regionId, String loadBalancerId, Integer listenerPort, Integer backendServerPort,
       String realServerType, String realServerId, Integer bandwidth, String scheduler,
-      Integer healthyThreshold, Integer unhealthyThreshold, Integer healthCheckConnectTimeout,
-      Integer healthCheckInterval, String healthCheckDomain, String healthCheckURI,
-      String healthCheckHttpCode, Integer healthCheckConnectPort, String cookie,
-      Integer cookieTimeout, String stickySessionType, String gzip, String xForwardedFor_SLBIP,
-      String xForwardedFor_SLBID, String xForwardedFor_proto, String xForwardedFor) {
+      Integer connectTimeout, String healthCheck, Integer healthyThreshold,
+      Integer unhealthyThreshold, Integer healthCheckConnectTimeout, Integer healthCheckInterval,
+      String healthCheckDomain, String healthCheckURI, String healthCheckHttpCode,
+      Integer healthCheckConnectPort, String cookie, Integer cookieTimeout, String stickySession,
+      String stickySessionType, String gzip, String xForwardedFor_SLBIP, String xForwardedFor_SLBID,
+      String xForwardedFor_proto, String xForwardedFor) {
 
     IAcsClient client = new SLBHelperAPIClient().getClient(regionId);
     CreateLoadBalancerHTTPListenerResponse response = null;
@@ -414,14 +415,17 @@ public class SLBHelperAPI {
     }
     request.setHealthyThreshold(healthyThreshold);
     request.setUnhealthyThreshold(unhealthyThreshold);
+    request.setHealthCheck(healthCheck);
     request.setHealthCheckDomain(healthCheckDomain);
     request.setHealthCheckURI(healthCheckURI);
     request.setHealthCheckConnectPort(healthCheckConnectPort);
-    request.setConnectTimeout(healthCheckConnectTimeout);
+    request.setConnectTimeout(connectTimeout);
+    request.setHealthCheckTimeout(healthCheckConnectTimeout);
     request.setHealthCheckInterval(healthCheckInterval);
     request.setHealthCheckHttpCode(healthCheckHttpCode);
     request.setCookie(cookie);
     request.setCookieTimeout(cookieTimeout);
+    request.setStickySession(stickySession);
     request.setStickySessionType(stickySessionType);
     request.setGzip(gzip);
     request.setXForwardedFor_SLBIP(xForwardedFor_SLBIP);
@@ -440,11 +444,12 @@ public class SLBHelperAPI {
   public static CreateLoadBalancerHTTPSListenerResponse createLoadBalancerHTTPSListener(
       String regionId, String loadBalancerId, Integer listenerPort, Integer backendServerPort,
       String realServerType, String realServerId, Integer bandwidth, String scheduler,
-      Integer healthyThreshold, Integer unhealthyThreshold, Integer healthCheckConnectTimeout,
-      Integer healthCheckInterval, String healthCheckDomain, String healthCheckURI,
-      String healthCheckHttpCode, Integer healthCheckConnectPort, String cookie,
-      Integer cookieTimeout, String stickySessionType, String gzip, String xForwardedFor_SLBIP,
-      String xForwardedFor_SLBID, String xForwardedFor_proto, String xForwardedFor) {
+      Integer connectTimeout, String healthCheck, Integer healthyThreshold,
+      Integer unhealthyThreshold, Integer healthCheckConnectTimeout, Integer healthCheckInterval,
+      String healthCheckDomain, String healthCheckURI, String healthCheckHttpCode,
+      Integer healthCheckConnectPort, String cookie, Integer cookieTimeout, String stickySession,
+      String stickySessionType, String gzip, String xForwardedFor_SLBIP, String xForwardedFor_SLBID,
+      String xForwardedFor_proto, String xForwardedFor) {
 
     IAcsClient client = new SLBHelperAPIClient().getClient(regionId);
     CreateLoadBalancerHTTPSListenerResponse response = null;
@@ -468,6 +473,8 @@ public class SLBHelperAPI {
       default:
         break;
     }
+    request.setHealthCheck(healthCheck);
+    request.setConnectTimeout(connectTimeout);
     request.setHealthyThreshold(healthyThreshold);
     request.setUnhealthyThreshold(unhealthyThreshold);
     request.setHealthCheckDomain(healthCheckDomain);
@@ -478,6 +485,7 @@ public class SLBHelperAPI {
     request.setHealthCheckHttpCode(healthCheckHttpCode);
     request.setCookie(cookie);
     request.setCookieTimeout(cookieTimeout);
+    request.setStickySession(stickySession);
     request.setStickySessionType(stickySessionType);
     request.setGzip(gzip);
     request.setXForwardedFor_SLBIP(xForwardedFor_SLBIP);
@@ -495,11 +503,11 @@ public class SLBHelperAPI {
 
   public static CreateLoadBalancerTCPListenerResponse createLoadBalancerTCPListener(String regionId,
       String loadBalancerId, Integer listenerPort, Integer backendServerPort, String realServerType,
-      String realServerId, Integer bandwidth, String scheduler, String healthCheckType,
-      Integer healthyThreshold, Integer unhealthyThreshold, Integer healthCheckConnectTimeout,
-      Integer healthCheckInterval, String healthCheckDomain, String healthCheckURI,
-      String healthCheckHttpCode, Integer presistenceTimeout, Integer establishedTimeout,
-      Integer healthCheckConnectPort) {
+      String realServerId, Integer bandwidth, String scheduler, Integer connectTimeout,
+      String healthCheckType, Integer healthyThreshold, Integer unhealthyThreshold,
+      Integer healthCheckConnectTimeout, Integer healthCheckInterval, String healthCheckDomain,
+      String healthCheckURI, String healthCheckHttpCode, Integer presistenceTimeout,
+      Integer establishedTimeout, Integer healthCheckConnectPort) {
     IAcsClient client = new SLBHelperAPIClient().getClient(regionId);
     CreateLoadBalancerTCPListenerResponse response = null;
     CreateLoadBalancerTCPListenerRequest request = new CreateLoadBalancerTCPListenerRequest();
@@ -522,7 +530,7 @@ public class SLBHelperAPI {
       default:
         break;
     }
-
+    request.setConnectTimeout(connectTimeout);
     request.setPersistenceTimeout(presistenceTimeout);
     request.setEstablishedTimeout(establishedTimeout);
     request.setHealthCheckType(healthCheckType);
@@ -544,16 +552,16 @@ public class SLBHelperAPI {
 
   public static CreateLoadBalancerUDPListenerResponse createLoadBalancerUDPListener(String regionId,
       String loadBalancerId, Integer listenerPort, Integer backendServerPort, String realServerType,
-      String realServerId, Integer bandwidth, String scheduler, Integer healthyThreshold,
-      Integer unhealthyThreshold, Integer healthCheckConnectTimeout, Integer healthCheckInterval,
-      Integer healthCheckConnectPort, Integer persistenceTimeout, String healthCheckExp,
-      String healthCheckReq) {
+      String realServerId, Integer bandwidth, String scheduler, Integer connectTimeout,
+      Integer healthyThreshold, Integer unhealthyThreshold, Integer healthCheckConnectTimeout,
+      Integer healthCheckInterval, Integer healthCheckConnectPort, Integer persistenceTimeout,
+      String healthCheckExp, String healthCheckReq) {
 
     IAcsClient client = new SLBHelperAPIClient().getClient(regionId);
     CreateLoadBalancerUDPListenerResponse response = null;
 
     CreateLoadBalancerUDPListenerRequest request = new CreateLoadBalancerUDPListenerRequest();
-
+    request.setConnectTimeout(connectTimeout);
     request.setRegionId(regionId);
     request.setLoadBalancerId(loadBalancerId);
     request.setListenerPort(listenerPort);

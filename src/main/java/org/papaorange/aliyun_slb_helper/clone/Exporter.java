@@ -108,6 +108,7 @@ public class Exporter {
             listener.setBackendServerPort(attr.getBackendServerPort());
           }
 
+          
           listener.setListenerPort(port);
           listener.setProtocol(protocol);
           listener.setBandwidth(attr.getBandwidth());
@@ -144,7 +145,7 @@ public class Exporter {
             attr.setBackendServerPort(attr.getBackendServerPort());
             listener.setBackendServerPort(attr.getBackendServerPort());
           }
-
+          
           listener.setListenerPort(port);
           listener.setProtocol(protocol);
           listener.setBandwidth(attr.getBandwidth());
@@ -177,6 +178,7 @@ public class Exporter {
             listener.setBackendServerPort(attr.getBackendServerPort());
           }
 
+          
           listener.setListenerPort(port);
           listener.setProtocol(protocol);
           listener.setBandwidth(attr.getBandwidth());
@@ -193,6 +195,7 @@ public class Exporter {
           ((HTTPListener) (listener)).setCookie(attr.getCookie());
           ((HTTPListener) (listener)).setCookieTimeout(attr.getCookieTimeout());
           ((HTTPListener) (listener)).setGzip(attr.getGzip());
+          ((HTTPListener) (listener)).setStickySession(attr.getStickySession());
           ((HTTPListener) (listener)).setStickySessionType(attr.getStickySessionType());
           ((HTTPListener) (listener)).setxForwardedFor(attr.getXForwardedFor());
           ((HTTPListener) (listener)).setxForwardedFor_proto(attr.getXForwardedFor_proto());
@@ -234,6 +237,7 @@ public class Exporter {
           ((HTTPSListener) (listener)).setCookie(attr.getCookie());
           ((HTTPSListener) (listener)).setCookieTimeout(attr.getCookieTimeout());
           ((HTTPSListener) (listener)).setGzip(attr.getGzip());
+          ((HTTPSListener) (listener)).setStickySession(attr.getStickySession());
           ((HTTPSListener) (listener)).setStickySessionType(attr.getStickySessionType());
           ((HTTPSListener) (listener)).setxForwardedFor(attr.getXForwardedFor());
           ((HTTPSListener) (listener)).setxForwardedFor_proto(attr.getXForwardedFor_proto());
