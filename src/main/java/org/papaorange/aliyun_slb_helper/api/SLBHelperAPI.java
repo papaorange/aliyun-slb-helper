@@ -447,9 +447,10 @@ public class SLBHelperAPI {
       String healthCheckURI, String healthCheckHttpCode, Integer healthCheckConnectPort,
       String cookie, Integer cookieTimeout, String stickySession, String stickySessionType,
       String gzip, String xForwardedFor_SLBIP, String xForwardedFor_SLBID,
-      String xForwardedFor_proto, String xForwardedFor) {
+      String xForwardedFor_proto, String xForwardedFor, String serverCertificateId,
+      String caCertificateId) {
 
-    IAcsClient client = new SLBHelperAPIClient().getClient(regionId);
+   IAcsClient client = new SLBHelperAPIClient().getClient(regionId);
     CreateLoadBalancerHTTPSListenerResponse response = null;
     CreateLoadBalancerHTTPSListenerRequest request = new CreateLoadBalancerHTTPSListenerRequest();
     request.setRegionId(regionId);
@@ -471,13 +472,13 @@ public class SLBHelperAPI {
       default:
         break;
     }
-    request.setHealthCheck(healthCheck);
     request.setHealthyThreshold(healthyThreshold);
     request.setUnhealthyThreshold(unhealthyThreshold);
+    request.setHealthCheck(healthCheck);
     request.setHealthCheckDomain(healthCheckDomain);
     request.setHealthCheckURI(healthCheckURI);
     request.setHealthCheckConnectPort(healthCheckConnectPort);
-    request.setConnectTimeout(healthCheckConnectTimeout);
+    request.setHealthCheckTimeout(healthCheckConnectTimeout);
     request.setHealthCheckInterval(healthCheckInterval);
     request.setHealthCheckHttpCode(healthCheckHttpCode);
     request.setCookie(cookie);
@@ -489,7 +490,8 @@ public class SLBHelperAPI {
     request.setXForwardedFor_SLBID(xForwardedFor_SLBID);
     request.setXForwardedFor_proto(xForwardedFor_proto);
     request.setXForwardedFor(xForwardedFor);
-    // todo 证书
+    request.setServerCertificateId(serverCertificateId);
+    request.setCACertificateId(caCertificateId);
     try {
       response = client.getAcsResponse(request);
     } catch (Exception e) {

@@ -16,7 +16,7 @@
         <!--这个输出控制台的配置 -->
         <Console name="Console" target="SYSTEM_OUT">
             <!-- 控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) -->
-            <ThresholdFilter level="trace" onMatch="ACCEPT"
+            <ThresholdFilter level="OFF" onMatch="ACCEPT"
                 onMismatch="DENY" />
             <!-- 输出日志的格式 -->
             <!-- 
@@ -45,7 +45,7 @@
         <RollingFile name="RollingFileInfo" fileName="${LOG_HOME}/info.log"
             filePattern="${LOG_HOME}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
-            <ThresholdFilter level="info" onMatch="ACCEPT"
+            <ThresholdFilter level="OFF" onMatch="ACCEPT"
                 onMismatch="DENY" />
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
             <Policies>
@@ -61,7 +61,7 @@
 
         <RollingFile name="RollingFileWarn" fileName="${WARN_LOG_FILE_NAME}/warn.log"
             filePattern="${WARN_LOG_FILE_NAME}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
-            <ThresholdFilter level="warn" onMatch="ACCEPT"
+            <ThresholdFilter level="OFF" onMatch="ACCEPT"
                 onMismatch="DENY" />
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
             <Policies>
@@ -74,7 +74,7 @@
 
         <RollingFile name="RollingFileError" fileName="${ERROR_LOG_FILE_NAME}/error.log"
             filePattern="${ERROR_LOG_FILE_NAME}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd-HH-mm}-%i.log">
-            <ThresholdFilter level="error" onMatch="ACCEPT"
+            <ThresholdFilter level="OFF" onMatch="ACCEPT"
                 onMismatch="DENY" />
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
             <Policies>

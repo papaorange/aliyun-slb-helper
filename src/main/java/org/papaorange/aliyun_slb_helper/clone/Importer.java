@@ -11,6 +11,7 @@ import org.papaorange.aliyun_slb_helper.model.LoadBalancerObject;
 import org.papaorange.aliyun_slb_helper.model.MasterSlaveServerGroup;
 import org.papaorange.aliyun_slb_helper.model.VServerGroup;
 import org.papaorange.aliyun_slb_helper.model.listener.HTTPListener;
+import org.papaorange.aliyun_slb_helper.model.listener.HTTPSListener;
 import org.papaorange.aliyun_slb_helper.model.listener.Listener;
 import org.papaorange.aliyun_slb_helper.model.listener.TCPListener;
 import org.papaorange.aliyun_slb_helper.model.listener.UDPListener;
@@ -158,6 +159,24 @@ public class Importer {
                 ((HTTPListener) listen).getxForwardedFor());
             break;
           case "https":
+            SLBHelperAPI.createLoadBalancerHTTPSListener(loadBalancerObject.getRegionIdAlias(),
+                response.getLoadBalancerId(), listen.getListenerPort(),
+                listen.getBackendServerPort(), listen.getRealServerType(),
+                gMap.get(listen.getRealServerId()), listen.getBandwidth(), listen.getScheduler(),
+                listen.getHealthCheck(), listen.getHealthyThreshold(),
+                listen.getUnhealthyThreshold(), listen.getHealthCheckConnectTimeout(),
+                listen.getHealthCheckInterval(), listen.getHealthCheckDomain(),
+                listen.getHealthCheckURI(), listen.getHealthCheckHttpCode(),
+                listen.getHealthCheckConnectPort(), ((HTTPSListener) listen).getCookie(),
+                ((HTTPSListener) listen).getCookieTimeout(),
+                ((HTTPSListener) listen).getStickySession(),
+                ((HTTPSListener) listen).getStickySessionType(), ((HTTPSListener) listen).getGzip(),
+                ((HTTPSListener) listen).getxForwardedFor_SLBIP(),
+                ((HTTPSListener) listen).getxForwardedFor_SLBID(),
+                ((HTTPSListener) listen).getxForwardedFor_proto(),
+                ((HTTPSListener) listen).getxForwardedFor(),
+                ((HTTPSListener) listen).getServerCertificateId(),
+                ((HTTPSListener) listen).getCaCertificateId());
             break;
           default:
             break;
@@ -177,7 +196,7 @@ public class Importer {
   public static void main(String[] args) {
     try {
       System.out.println(importLoadbalancer(
-          "slbs/cn-beijing/lb-2ze4d63ksjmxbw6xwznfo-172.17.196.215.json", "", ""));
+          "D:\\develop\\workspace\\aliyun-slb-helper\\slbs\\cn-shenzhen\\lb-wz9s3wz8oko49xf33z77w-100.114.250.157.json", "", ""));
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
