@@ -9,7 +9,7 @@ public class App {
 
     if (args.length < 1) {
       System.out.println(
-          "\n\n参数提示：\nexport all  导出所有地域所有实例到slbs目录下;\nclone local filname 使用导出到本地的slb配置文件克隆一个实例\nclone online region loadbalancerid 指定源实例所在地域和实例id，克隆一个新实例；\nclone功能忽略原有实例的付费类型，一律生成按量付费实例");
+          "\n参数提示：\nexport all  导出所有地域所有实例到slbs目录下;\nclone local filname 使用导出到本地的slb配置文件克隆一个实例\nclone online region loadbalancerid 指定源实例所在地域和实例id，克隆一个新实例；\nclone功能忽略原有实例的付费类型，一律生成按量付费实例");
       return;
     }
     if (args[0].equals("export")) {
@@ -52,7 +52,7 @@ public class App {
             }
             try {
               System.out.println("开始clone实例，新实例ID为：");
-              Importer.importLoadbalancer(args[1], "", "");
+              Importer.importLoadbalancer(args[2], "", "");
             } catch (IOException e) {
               System.err.println("错误：\n打开文件出错，文件路径不正确？不是slb导出文件？" + "\"" + args[1] + "\"");
               e.printStackTrace();
